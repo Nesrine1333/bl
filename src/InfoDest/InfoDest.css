@@ -1,0 +1,22 @@
+.mb-3{
+  display: flex;
+}
+
+.container-dest{
+    margin: 70px;
+    background-color: rgb(249, 249, 248);
+    padding: 50px;
+    padding-left: 100px;
+    padding-right:80px
+    
+}
+.saisie{
+    font-size: 20px;
+    font-weight: 400;
+    margin: 15px;
+   
+}
+
+.description{
+    margin-right: 20px;
+}
