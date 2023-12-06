@@ -1,17 +1,16 @@
-
-import { Routes, Route } from 'react-router-dom';
-import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
 import Home from './Home/Home';
-
 import AddBL from './AddBL/AddBL';
 import ViewBL from './ViewBL/ViewBL';
 import ExcelPage from './ExcelPage/ExcelPage';
 import ProtectedRoute from './layout/ProtectedRoute';
+import useAuth from './useAuth'; 
 
 function App() {
-
+  const isAuthenticated = useAuth();
 
   return (
     <div className='app'>
@@ -20,31 +19,48 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/home' element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
+          isAuthenticated ? (
+            <ProtectedRoute> 
+              <Home />
+            </ProtectedRoute>
+          ) : (
+            // Redirect to login if not authenticated
+            <Navigate to="/login" replace />
+          )
         } />
-       <Route path="/bl/:idUser/createbl" element= {
-          <ProtectedRoute>
-            <AddBL />
-          </ProtectedRoute>
+        <Route path="/bl/:idUser/createbl" element={
+          isAuthenticated ? (
+            <ProtectedRoute>
+              <AddBL />
+            </ProtectedRoute>
+          ) : (
+            // Redirect to login if not authenticated
+            <Navigate to="/login" replace />
+          )
         } />
         <Route path='/viewbl' element={
-          <ProtectedRoute>
-            <ViewBL />
-          </ProtectedRoute>
-        }></Route>
+          isAuthenticated ? (
+            <ProtectedRoute>
+              <ViewBL />
+            </ProtectedRoute>
+          ) : (
+            // Redirect to login if not authenticated
+            <Navigate to="/login" replace />
+          )
+        } />
         <Route path='/excel' element={
-          <ProtectedRoute>
-            <ExcelPage />
-          </ProtectedRoute>
-        }></Route>
+          isAuthenticated ? (
+            <ProtectedRoute>
+              <ExcelPage />
+            </ProtectedRoute>
+          ) : (
+            // Redirect to login if not authenticated
+            <Navigate to="/login" replace />
+          )
+        } />
       </Routes>
-
-
     </div>
-
   );
 }
 
-export default App
+export default App;
