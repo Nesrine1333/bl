@@ -7,7 +7,7 @@ import { createBL } from '../redux/actions/blActions';
 import { generatePdf } from '../redux/actions/pdfActions'; // Import the generatePdf action
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
 
-import '../AddBL/AddBL.css';
+import './AddBl.css';
 
 function AddBL() {
   const dispatch = useDispatch();
@@ -69,22 +69,23 @@ const handleValiderClick = async () => {
   };
 
   return (
-    <div>
-      <NavBar />
-      <InfoDest onSubmit={handleDestFormSubmit} />
-      <InfoColis onSubmit={handleColisFormSubmit} />
-      <div className='validation'>
-        <button type="button" className='btnv' onClick={handleValiderClick}>
-          Valider
-        </button>
-      </div>
-      <div className='pdf'>
-        <button type="button" className='btnp' onClick={handleGeneratePdfClick}>
-          Créer PDF
-        </button>
-      </div>
-    </div>
-  );
+    <div className="container">
+    <NavBar />
+    <InfoDest onSubmit={handleDestFormSubmit} className="InfoDest" />
+    <InfoColis onSubmit={handleColisFormSubmit} className="InfoColis" />
+    <div className='validation'>
+  <div className="button-container">
+    <button type="button" className='btnv' onClick={handleValiderClick}>
+      Valider
+    </button>
+    <button type="button" className='btnp' onClick={handleGeneratePdfClick}>
+      Créer PDF
+    </button>
+  </div>
+</div>
+  </div>
+);
+
 }
 
 export default AddBL;

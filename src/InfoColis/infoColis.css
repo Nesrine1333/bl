@@ -10,14 +10,12 @@
     margin-bottom: 20px;
   }
   
-  /* Adjust styling for form controls */
   .form-control {
     margin-bottom: 10px;
   }
   
-  /* Style for the Submit button */
   button {
-    background-color: #007bff;
+    background-color: #28a745; /* Green color, you can change it */
     color: #fff;
     padding: 10px 15px;
     border: none;
@@ -26,6 +24,6 @@
   }
   
   button:hover {
-    background-color: #0056b3;
+    background-color: #218838; /* Darker green on hover, you can change it */
   }
   

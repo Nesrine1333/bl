@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import './infoColis.css';
 
 function InfoColis({ onSubmit }) {
   const { register, handleSubmit } = useForm();
@@ -40,29 +41,7 @@ function InfoColis({ onSubmit }) {
           </Form.Group>
         </Row>
 
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6" controlId="etatC">
-            <Form.Label>Livraison</Form.Label>
-            <Form.Control
-              {...register('etatC', { required: true })}
-              type="text"
-              placeholder="Enter Livraison"
-              required
-            />
-          </Form.Group>
-        </Row>
-
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6" controlId="montantLiv">
-            <Form.Label>Montant Livraison</Form.Label>
-            <Form.Control
-              {...register('prixLiv', { required: true })}
-              type="number"
-              placeholder="Enter Montant Livraison"
-              required
-            />
-          </Form.Group>
-        </Row>
+        
 
         <button type="submit">Submit</button>
       </Form>
