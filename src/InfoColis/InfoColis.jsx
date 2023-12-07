@@ -33,7 +33,7 @@ function InfoColis({ onSubmit }) {
           <Form.Group as={Col} md="6" controlId="montantHLiv">
             <Form.Label>Montant Hors Livraison</Form.Label>
             <Form.Control
-              {...register('prixtHliv', { required: true })}
+              {...register('prixHliv', { required: true })}
               type="number"
               placeholder="Enter Montant Hors Livraison"
               required
