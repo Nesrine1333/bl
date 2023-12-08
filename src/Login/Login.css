@@ -1,3 +1,24 @@
+.container-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+input[type="file"] {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #999bff; /* Light butter color */
+  border: 1px solid #39c7e0; /* Butter color */
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type="file"]:hover {
+  background-color: #5739e0; /* Butter color on hover */
+  color: #fff; /* White text on hover */
+}
+
+
 .logo {
   max-width: 100%;
   display: block;

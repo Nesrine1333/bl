@@ -8,6 +8,7 @@ import ViewBL from './ViewBL/ViewBL';
 import ExcelPage from './ExcelPage/ExcelPage';
 import ProtectedRoute from './layout/ProtectedRoute';
 import useAuth from './useAuth'; 
+import Importex from './Importex/Importex';
 
 function App() {
   const isAuthenticated = useAuth();
@@ -52,6 +53,16 @@ function App() {
           isAuthenticated ? (
             <ProtectedRoute>
               <ExcelPage />
+            </ProtectedRoute>
+          ) : (
+            // Redirect to login if not authenticated
+            <Navigate to="/login" replace />
+          )
+        } />
+         <Route path="/bl/:idUser/importex" element={
+          isAuthenticated ? (
+            <ProtectedRoute>
+              <Importex />
             </ProtectedRoute>
           ) : (
             // Redirect to login if not authenticated

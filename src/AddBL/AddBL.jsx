@@ -6,6 +6,7 @@ import NavBar from '../NavBar/NavBar';
 import { createBL } from '../redux/actions/blActions';
 import { generatePdf } from '../redux/actions/pdfActions'; // Import the generatePdf action
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
+import { ToastContainer, toast } from 'react-toastify';
 
 import './AddBl.css';
 
@@ -16,6 +17,7 @@ function AddBL() {
   const userId = useSelector((state) => state.auth.user?.id);
   const [blId, setBlId] = useState(null); // State to store the BL ID
   const navigate = useNavigate(); // Get the navigate function from React Router
+	const notify = () => toast.success('BL created successfully !');
 
   useEffect(() => {
     // Redirect to the URL with the actual user ID when the component mounts
@@ -45,11 +47,12 @@ const handleValiderClick = async () => {
 
     console.log('createdBL:', createdBL); // Log the entire object
 
-    if (createdBL && createdBL.id) {
-      alert(`BL created successfully with ID: ${createdBL.id}`);
-      setBlId(createdBL.id); // Set the BL ID
+    if (createdBL) {
+      notify(); // Call notify to show the toast
+
+      setBlId(createdBL); // Set the BL ID
     } else {
-      console.error('Invalid BL data received:', createdBL);
+      console.error('Invalid BL data received:', createdBL.id);
     }
   } catch (error) {
     console.error('Error creating BL:', error);
@@ -59,9 +62,10 @@ const handleValiderClick = async () => {
   
 
   const handleGeneratePdfClick = () => {
-    alert(blId)
     if (blId) {
-      dispatch(generatePdf(blId)); // Dispatch the generatePdf action with the stored BL ID
+      const downloadUrl = `http://localhost:3000/bl/${blId}/file`;
+      window.location.href = downloadUrl;
+
     } else {
       // Handle the case where the BL ID is not available
       console.error('BL ID not available');
@@ -79,7 +83,7 @@ const handleValiderClick = async () => {
       Valider
     </button>
     <button type="button" className='btnp' onClick={handleGeneratePdfClick}>
-      Créer PDF
+      Télécharger PDF
     </button>
   </div>
 </div>
