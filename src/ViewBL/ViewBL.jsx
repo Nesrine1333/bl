@@ -1,56 +1,78 @@
-import React from 'react'
-import NavBar from '../NavBar/NavBar'
-import { Col,Row,Button } from 'react-bootstrap'
-import '../ViewBL/ViewBL.css'
-import { FaFileDownload } from "react-icons/fa";
+import React, { useState, useEffect } from 'react';
+import { Col, Row, Button } from 'react-bootstrap';
+import { FaFileDownload } from 'react-icons/fa';
+import NavBar from '../NavBar/NavBar';
+import './ViewBL.css'; // Ensure to import your CSS file
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
 
 function ViewBL() {
+  const [bills, setBills] = useState([]);
+  const userId = useSelector((state) => state.auth.user?.id);
+
+  useEffect(() => {
+    // Fetch bills data from your API
+    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
+    fetch(`http://localhost:3000/bl/${userId}/getAllBlByUser`)
+      .then((response) => response.json())
+      .then((data) => setBills(data))
+      .catch((error) => console.error('Error fetching bills:', error));
+  }, []);
+
+
+
+  const downloadPdf = (billId) => {
+    // Implement the logic to download the PDF for the given bill ID
+    const pdfUrl = `http://localhost:3000/bl/${billId}/downloadImported`;
+
+    // Use window.location.href to trigger the download
+    window.location.href = pdfUrl;
+      // Replace the console.log with the actual logic to download the PDF
+  };
+
   return (
     <div>
-<div className='filters-container'>
-   <NavBar/>
-   <Row className='filtres'>
-    <Col>
-    </Col>
-      <Col className='labelf'>
-        <p>Filtrer par:</p>
-      </Col>
-      <Col className='filtre-btn'>
-        <Button onClick={() => handleFilterClick('date')}>Date</Button>
-      </Col>
-      <Col className='filtre-btn'>
-        <Button onClick={() => handleFilterClick('number')}>N° Tel</Button>
-      </Col>
-      <Col className='filtre-btn'>
-        <Button onClick={() => handleFilterClick('name')}>Nom Destinataire</Button>
-      </Col>
-    </Row>
- 
-</div>
-<div className='view-container'>
-    <Row className='details'>
-      <Col className='filename'>
-        <p> Nom du fichier:</p>
-      </Col>
-      <Col className='filedate'>
-        date de création:
-      </Col>
-    </Row>
-    <div className='files-container'>
-    <Row className='files'>
-    <Col className='filename2'>
-       dhfjdhfjkdshfkjsd
-      </Col>
-      <Col className='filedate2'>
-      ffjksdkfhsdjkhfsk
-      </Col>
-      <Button className='download'> <FaFileDownload/> </Button>
-    </Row>
-    </div>
-    </div>
-</div>
+      <div className='filters-container'>
+        <NavBar />
+      </div>
+      <div className='table-container'>
+        <table className='custom-table'>
+          <thead className='table-header'>
+            <tr>
+              <th>Date</th>
+              <th>Nom Destinataire</th>
+              <th>Numéro Téléphone</th>
+              <th>Prix Hliv</th>
+              <th>description</th>
+              <th>Action</th>
 
-  )
+            </tr>
+          </thead>
+          <tbody className='table-body'>
+            {bills.map((bill) => (
+              <tr key={bill.id}>
+                <td>{bill.dateBl}</td>
+                <td>{bill.nomDest}</td>
+                <td>{bill.numTelephone1}</td>
+                <td>{bill.prixHliv}</td>
+                <td>{bill.desc}</td>
+
+                <td>
+                  <Button
+                    size='sm'
+                    variant='success'
+                    onClick={() => downloadPdf(bill.id)}
+                  >
+                    <FaFileDownload /> Télécharger
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
-export default ViewBL
+export default ViewBL;

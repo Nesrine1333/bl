@@ -39,7 +39,7 @@ function App() {
             <Navigate to="/login" replace />
           )
         } />
-        <Route path='/viewbl' element={
+        <Route path="/viewbl" element={
           isAuthenticated ? (
             <ProtectedRoute>
               <ViewBL />
