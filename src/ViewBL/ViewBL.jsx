@@ -5,6 +5,7 @@ import NavBar from '../NavBar/NavBar';
 import './ViewBL.css'; // Ensure to import your CSS file
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
+import BASE_URL from '../services/apiConfig';
 
 function ViewBL() {
   const [bills, setBills] = useState([]);
@@ -13,7 +14,7 @@ function ViewBL() {
   useEffect(() => {
     // Fetch bills data from your API
     // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
-    fetch(`http://localhost:3000/bl/${userId}/getAllBlByUser`)
+    fetch(`${BASE_URL}/bl/${userId}/getAllBlByUser`)
       .then((response) => response.json())
       .then((data) => setBills(data))
       .catch((error) => console.error('Error fetching bills:', error));
@@ -23,7 +24,7 @@ function ViewBL() {
 
   const downloadPdf = (billId) => {
     // Implement the logic to download the PDF for the given bill ID
-    const pdfUrl = `http://localhost:3000/bl/${billId}/downloadImported`;
+    const pdfUrl = `${BASE_URL}/bl/${billId}/downloadImported`;
 
     // Use window.location.href to trigger the download
     window.location.href = pdfUrl;

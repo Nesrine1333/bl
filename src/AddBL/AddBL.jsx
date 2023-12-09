@@ -7,6 +7,7 @@ import { createBL } from '../redux/actions/blActions';
 import { generatePdf } from '../redux/actions/pdfActions'; // Import the generatePdf action
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
 import { ToastContainer, toast } from 'react-toastify';
+import BASE_URL from '../services/apiConfig';
 
 import './AddBl.css';
 
@@ -63,7 +64,7 @@ const handleValiderClick = async () => {
 
   const handleGeneratePdfClick = () => {
     if (blId) {
-      const downloadUrl = `http://localhost:3000/bl/${blId}/file`;
+      const downloadUrl = `${BASE_URL}/bl/${blId}/file`;
       window.location.href = downloadUrl;
 
     } else {
