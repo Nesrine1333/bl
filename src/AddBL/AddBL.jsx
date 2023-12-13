@@ -1,11 +1,10 @@
-import React, { useState,useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import InfoDest from '../InfoDest/InfoDest';
 import InfoColis from '../InfoColis/InfoColis';
 import NavBar from '../NavBar/NavBar';
 import { createBL } from '../redux/actions/blActions';
-import { generatePdf } from '../redux/actions/pdfActions'; // Import the generatePdf action
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import BASE_URL from '../services/apiConfig';
 
@@ -16,27 +15,25 @@ function AddBL() {
   const [destData, setDestData] = useState({});
   const [colisData, setColisData] = useState({});
   const userId = useSelector((state) => state.auth.user?.id);
-  const [blId, setBlId] = useState(null); // State to store the BL ID
-  const navigate = useNavigate(); // Get the navigate function from React Router
-	const notify = () => toast.success('BL created successfully !');
+  const [blId, setBlId] = useState(null);
+  const navigate = useNavigate();
+  const notify = () => toast.success('BL created successfully !');
 
   useEffect(() => {
-    // Redirect to the URL with the actual user ID when the component mounts
     if (userId) {
       navigate(`/bl/${userId}/createbl`);
     }
   }, [navigate, userId]);
 
-
   const handleDestFormSubmit = (data) => {
-    setDestData(data); // Store form data from InfoDest
+    setDestData(data);
   };
 
   const handleColisFormSubmit = (data) => {
-    setColisData(data); // Store form data from InfoColis
+    setColisData(data);
   };
 
-const handleValiderClick = async () => {
+ const handleValiderClick = async () => {
   try {
     const blData = {
       ...destData,
@@ -44,53 +41,53 @@ const handleValiderClick = async () => {
     };
 
     // Dispatch the createBL action and get the BL ID from the payload
-    const { payload: createdBL } = await dispatch(createBL({ userId, blData }));
-
-    console.log('createdBL:', createdBL); // Log the entire object
+    const { payload: createdBL, error } = await dispatch(createBL({ userId, blData }));
 
     if (createdBL) {
       notify(); // Call notify to show the toast
-
       setBlId(createdBL); // Set the BL ID
     } else {
-      console.error('Invalid BL data received:', createdBL.id);
+      console.error('Error creating BL:', error);
+
+      // Check for specific error messages and handle accordingly
+      if (error && error.message === 'Your specific error message') {
+        // Handle specific error
+      } else {
+        // Handle generic error
+      }
     }
   } catch (error) {
     console.error('Error creating BL:', error);
   }
 };
-  
-  
+
 
   const handleGeneratePdfClick = () => {
     if (blId) {
       const downloadUrl = `${BASE_URL}/bl/${blId}/file`;
       window.location.href = downloadUrl;
-
     } else {
-      // Handle the case where the BL ID is not available
       console.error('BL ID not available');
     }
   };
 
   return (
     <div className="container">
-    <NavBar />
-    <InfoDest onSubmit={handleDestFormSubmit} className="InfoDest" />
-    <InfoColis onSubmit={handleColisFormSubmit} className="InfoColis" />
-    <div className='validation'>
-  <div className="button-container">
-    <button type="button" className='btnv' onClick={handleValiderClick}>
-      Valider
-    </button>
-    <button type="button" className='btnp' onClick={handleGeneratePdfClick}>
-      Télécharger PDF
-    </button>
-  </div>
-</div>
-  </div>
-);
-
+      <NavBar />
+      <InfoDest onSubmit={handleDestFormSubmit} className="InfoDest" />
+      <InfoColis onSubmit={handleColisFormSubmit} className="InfoColis" />
+      <div className='validation'>
+        <div className="button-container">
+          <button type="button" className='btnv' onClick={handleValiderClick}>
+            Valider
+          </button>
+          <button type="button" className='btnp' onClick={handleGeneratePdfClick}>
+            Télécharger PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default AddBL;

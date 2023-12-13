@@ -7,6 +7,7 @@ export const createBL = createAsyncThunk(
   async ({ userId, blData }, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${BASE_URL}/bl/${userId}/createbl`, blData);
+      console.log(response.data);
       return response.data; // Assuming the response contains the created BL data
     } catch (error) {
       return rejectWithValue(error.response.data); // Custom data handling for rejection

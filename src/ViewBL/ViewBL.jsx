@@ -1,40 +1,84 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row, Button, Pagination } from 'react-bootstrap';
 import { FaFileDownload } from 'react-icons/fa';
 import NavBar from '../NavBar/NavBar';
-import './ViewBL.css'; // Ensure to import your CSS file
+import './ViewBL.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
 import BASE_URL from '../services/apiConfig';
 
 function ViewBL() {
   const [bills, setBills] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [filters, setFilters] = useState({ dateBl: '', nomDest: '', blname: '' });
   const userId = useSelector((state) => state.auth.user?.id);
 
   useEffect(() => {
-    // Fetch bills data from your API
-    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
-    fetch(`${BASE_URL}/bl/${userId}/getAllBlByUser`)
+    const filterParams = new URLSearchParams({
+      page: currentPage,
+      dateBl: filters.dateBl,
+      nomDest: filters.nomDest,
+      blname: filters.blname,
+    });
+
+    fetch(`${BASE_URL}/bl/${userId}/getAllBlByUserFilter?${filterParams.toString()}`)
       .then((response) => response.json())
-      .then((data) => setBills(data))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setBills(data);
+          // Calculate total pages based on the assumption that there are 10 items per page
+          const totalPages = Math.ceil(data.length / 10);
+          setTotalPages(totalPages);
+        } else {
+          setBills([]);
+          setTotalPages(0);
+        }
+      })
       .catch((error) => console.error('Error fetching bills:', error));
-  }, []);
-
-
+  }, [currentPage, userId, filters]);
 
   const downloadPdf = (billId) => {
-    // Implement the logic to download the PDF for the given bill ID
     const pdfUrl = `${BASE_URL}/bl/${billId}/downloadImported`;
-
-    // Use window.location.href to trigger the download
     window.location.href = pdfUrl;
-      // Replace the console.log with the actual logic to download the PDF
+  };
+
+  const handlePagination = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleFilterChange = (filterName, value) => {
+    setCurrentPage(1); // Reset page when filters change
+    setFilters((prevFilters) => ({ ...prevFilters, [filterName]: value }));
   };
 
   return (
     <div>
       <div className='filters-container'>
         <NavBar />
+        <div>
+          <label>Date:</label>
+          <input
+            type='date'
+            value={filters.dateBl}
+            onChange={(e) => handleFilterChange('dateBl', e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Nom Destinataire:</label>
+          <input
+            type='text'
+            value={filters.nomDest}
+            onChange={(e) => handleFilterChange('nomDest', e.target.value)}
+          />
+        </div>
+        <div>
+          <label>BL Name:</label>
+          <input
+            type='text'
+            value={filters.blname}
+            onChange={(e) => handleFilterChange('blname', e.target.value)}
+          />
+        </div>
       </div>
       <div className='table-container'>
         <table className='custom-table'>
@@ -46,7 +90,6 @@ function ViewBL() {
               <th>Prix Hliv</th>
               <th>description</th>
               <th>Action</th>
-
             </tr>
           </thead>
           <tbody className='table-body'>
@@ -57,7 +100,6 @@ function ViewBL() {
                 <td>{bill.numTelephone1}</td>
                 <td>{bill.prixHliv}</td>
                 <td>{bill.desc}</td>
-
                 <td>
                   <Button
                     size='sm'
@@ -71,6 +113,23 @@ function ViewBL() {
             ))}
           </tbody>
         </table>
+
+        {/* Pagination */}
+        <Row className='pagination-container'>
+          <Col>
+            <Pagination>
+              {[...Array(totalPages).keys()].map((page) => (
+                <Pagination.Item
+                  key={page + 1}
+                  active={page + 1 === currentPage}
+                  onClick={() => handlePagination(page + 1)}
+                >
+                  {page + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
+          </Col>
+        </Row>
       </div>
     </div>
   );
